@@ -9,7 +9,7 @@ import java.util.Set;
  * First check if instances are equal.
  * Check if all fields are the same by traversing though the inheritance hierarchy.
  * Compare the field values using the normal equality check.
- *
+ * <p>
  * {@author nkokhelox <Nkokhelo E. Mhlongo>}
  */
 public class InstanceDiff
@@ -24,7 +24,8 @@ public class InstanceDiff
 
     private class DiffDecision
     {
-        Set<String> fieldNameSet; DiffStratergy fieldSetUsage;
+        Set<String> fieldNameSet;
+        DiffStratergy fieldSetUsage;
 
         DiffDecision(DiffStratergy fieldSetUsage)
         {
@@ -36,18 +37,32 @@ public class InstanceDiff
             this.fieldNameSet = fieldNameSet;
             this.fieldSetUsage = fieldSetUsage;
         }
+
         boolean continueFieldDiff(String fieldName)
         {
             return fieldNameSet == null || fieldSetUsage == DiffStratergy.ALL_FIELDS ||
                     (fieldSetUsage == DiffStratergy.EXCLUDE_FIELDS && !fieldNameSet.contains(fieldName)) ||
                     (fieldSetUsage == DiffStratergy.DIFF_OF_FIELDS && fieldNameSet.contains(fieldName));
         }
-        boolean continueFieldDiff(Class klass, int currentLevel){
+
+        boolean continueFieldDiff(Class klass, int currentLevel)
+        {
             return !(Object.class.equals(klass)) && (currentLevel <= climbLevel || climbLevel < 0);
+        }
+
+        boolean areValueDiff(Object value1, Object value2)
+        {
+            if(value1 == value2)
+                {
+                return false;
+                }
+            return (value1 == null && value2 != null)
+                    || (value1 != null && value2 == null)
+                    || (!value1.equals(value2));
         }
     }
 
-    public static class FieldDiff
+    public static class FieldDiff implements Comparable
     {
         private final String fieldName;
         private final Object inst1FieldValue;
@@ -79,6 +94,12 @@ public class InstanceDiff
         public int hashCode()
         {
             return super.hashCode() + (fieldName != null ? fieldName.hashCode() : 0);
+        }
+
+        public int compareTo(Object obj)
+        {
+            FieldDiff that = (FieldDiff)obj;
+            return this.fieldName.compareTo(that.fieldName);
         }
     }
 
@@ -135,7 +156,7 @@ public class InstanceDiff
      * @return the {@code non-null} {@link Set}&lt;{@link FieldDiff}&gt; for the fields with different values.
      * @since Origin
      */
-    public Set<FieldDiff> getDiffOf() throws Exception
+    public Set<FieldDiff> getDiff() throws Exception
     {
         return getDiff(new DiffDecision(DiffStratergy.ALL_FIELDS));
     }
@@ -144,7 +165,7 @@ public class InstanceDiff
     private Set<FieldDiff> getDiff(DiffDecision decider) throws Exception
     {
         Set diff = new HashSet();
-        if(instance1 != null && instance2 != null && instance1.equals(instance2))
+        if(instance1 != null && instance2 != null && !instance1.equals(instance2))
             {
             int hierachyLevel = 0;
             Class klass = instance1.getClass();
@@ -160,7 +181,7 @@ public class InstanceDiff
                             {
                             Object inst1Fv = field.get(instance1);
                             Object inst2Fv = field.get(instance2);
-                            if(!inst1Fv.equals(inst2Fv))
+                            if(decider.areValueDiff(inst1Fv, inst2Fv))
                                 {
                                 diff.add(new FieldDiff(fieldName, inst1Fv, inst2Fv));
                                 }
