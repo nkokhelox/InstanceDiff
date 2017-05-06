@@ -1,7 +1,4 @@
-image: maven:3.3.3
-
-pipelines:
-  default:
-    - step:
-        script:
-          - mvn clean install
+box: maven:latest
+build:
+  steps:
+    - mvn clean install
