@@ -1,4 +1,5 @@
 box: maven:latest
 build:
   steps:
-    - mvn clean install
+    - xenoterracide/maven:
+        goals: install
