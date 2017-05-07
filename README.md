@@ -1,6 +1,6 @@
 # InstanceDiff
 
-[![wercker status](https://app.wercker.com/status/afd662348473ee5bec194f2faf85d917/m/master "wercker status")](https://app.wercker.com/project/byKey/afd662348473ee5bec194f2faf85d917)
+[![wercker status](https://app.wercker.com/status/baba54183fe4a24886de628c7997b32b/m/master "wercker status")](https://app.wercker.com/project/byKey/baba54183fe4a24886de628c7997b32b)
 
 Given 2 instances of the same class then the difference can be detected using this.
 - This can find the differences of 
