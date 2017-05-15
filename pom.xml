@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>pisd.works.nkokhelox</groupId>
-    <artifactId>InstanceDiff</artifactId>
     <version>Origin</version>
-    <packaging>jar</packaging>
     <name>InstanceDiff</name>
+    <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>InstanceDiff</artifactId>
+    <sourceEncoding>UTF-8</sourceEncoding>
+    <groupId>pisd.works.nkokhelox</groupId>
     <description>Extracts field differences from the provided instances.</description>
     <url>https://github.com/nkokhelox/InstanceDiff</url>
 
@@ -35,64 +35,6 @@
                 <version>4.3.0</version>
                 <configuration>
                     <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <format>xml</format>
-                    <maxmem>256m</maxmem>
-                    <!-- aggregated reports for multi-module projects -->
-                    <aggregate>true</aggregate>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.6.201602180812</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.6.201602180812</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.github.timurstrekalov</groupId>
-                <artifactId>saga-maven-plugin</artifactId>
-                <version>1.5.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>coverage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
-                    <outputDir>${project.build.directory}/saga-coverage</outputDir>
-                    <noInstrumentPatterns>
-                        <pattern>.*/spec/.*</pattern>
-                        <pattern>.*/classpath/.*</pattern>
-                        <pattern>.*/webjars/.*</pattern>
-                    </noInstrumentPatterns>
                 </configuration>
             </plugin>
          </plugins>
