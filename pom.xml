@@ -21,6 +21,10 @@
         <maven>3</maven>
     </prerequisites>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -30,7 +34,6 @@
         </dependency>
     </dependencies>
     <build>
-        <sourceEncoding>UTF-8</sourceEncoding>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
