@@ -7,7 +7,6 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>InstanceDiff</artifactId>
-    <sourceEncoding>UTF-8</sourceEncoding>
     <groupId>pisd.works.nkokhelox</groupId>
     <url>https://github.com/nkokhelox/InstanceDiff</url>
     <description>Extracts field differences from the provided instances.</description>
@@ -18,6 +17,10 @@
         </developer>
     </developers>
 
+    <prerequisites>
+        <maven>3</maven>
+    </prerequisites>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -27,6 +30,7 @@
         </dependency>
     </dependencies>
     <build>
+        <sourceEncoding>UTF-8</sourceEncoding>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
