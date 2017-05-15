@@ -9,8 +9,14 @@
     <artifactId>InstanceDiff</artifactId>
     <sourceEncoding>UTF-8</sourceEncoding>
     <groupId>pisd.works.nkokhelox</groupId>
-    <description>Extracts field differences from the provided instances.</description>
     <url>https://github.com/nkokhelox/InstanceDiff</url>
+    <description>Extracts field differences from the provided instances.</description>
+
+    <developers>
+        <developer>
+            <name>Nkokhelox</name>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
