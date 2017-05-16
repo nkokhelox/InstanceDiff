@@ -40,9 +40,17 @@ public class InstanceDiff
 
         boolean continueFieldDiff(String fieldName)
         {
-            return fieldNameSet == null || fieldSetUsage == DiffStratergy.ALL_FIELDS ||
-                    (fieldSetUsage == DiffStratergy.EXCLUDE_FIELDS && !fieldNameSet.contains(fieldName)) ||
-                    (fieldSetUsage == DiffStratergy.DIFF_OF_FIELDS && fieldNameSet.contains(fieldName));
+            boolean fieldNotExcluded =
+                    fieldSetUsage == DiffStratergy.EXCLUDE_FIELDS &&
+                            !fieldNameSet.contains(fieldName);
+
+            boolean specificFieldDiff =
+                    fieldSetUsage == DiffStratergy.DIFF_OF_FIELDS &&
+                            !fieldNameSet.isEmpty() &&
+                            fieldNameSet.contains(fieldName) &&
+                            fieldNameSet.remove(fieldName);
+
+            return fieldNameSet == null || fieldSetUsage == DiffStratergy.ALL_FIELDS || fieldNotExcluded || specificFieldDiff;
         }
 
         boolean continueFieldDiff(Class klass, int currentLevel)
@@ -98,7 +106,7 @@ public class InstanceDiff
 
         public int compareTo(Object obj)
         {
-            FieldDiff that = (FieldDiff)obj;
+            FieldDiff that = (FieldDiff) obj;
             return this.fieldName.compareTo(that.fieldName);
         }
     }
