@@ -12,6 +12,10 @@
     <description>Extracts field differences from the provided instances.</description>
     <url>https://github.com/nkokhelox/InstanceDiff</url>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
