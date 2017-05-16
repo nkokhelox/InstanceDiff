@@ -25,7 +25,21 @@
         </dependency>
     </dependencies>
     <build>
-        <plugins>
+        <plugins> 
+            <plugin>
+                <groupId>com.srcclr</groupId>
+                <artifactId>srcclr-maven-plugin</artifactId>
+                <version>1.0.1</version>
+               <executions>
+                   <execution>
+                       <id>srcclr-scan</id>
+                       <phase>verify</phase>
+                       <goals>
+                           <goal>scan</goal>
+                       </goals>
+                   </execution>
+              </executions>
+            </plugin>
 
             <!-- Code compilation -->
             <plugin>
