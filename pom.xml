@@ -22,6 +22,8 @@
     </dependencies>
     <build>
         <plugins>
+
+            <!-- Code compilation -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -29,6 +31,8 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+
+            <!-- Code coverage -->
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
