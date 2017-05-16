@@ -27,7 +27,7 @@
     <build>
         <plugins> 
             <plugin>
-                <groupId>com.srcclr</groupId>
+                <groupId>com.sourceclear</groupId>
                 <artifactId>srcclr-maven-plugin</artifactId>
                 <version>1.0.1</version>
                <executions>
