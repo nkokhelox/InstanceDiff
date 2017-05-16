@@ -2,28 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <version>Origin</version>
-    <name>InstanceDiff</name>
-    <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>InstanceDiff</artifactId>
+
     <groupId>pisd.works.nkokhelox</groupId>
-    <url>https://github.com/nkokhelox/InstanceDiff</url>
+    <artifactId>InstanceDiff</artifactId>
+    <version>Origin</version>
+    <packaging>jar</packaging>
+    <name>InstanceDiff</name>
     <description>Extracts field differences from the provided instances.</description>
-
-    <developers>
-        <developer>
-            <name>Nkokhelox</name>
-        </developer>
-    </developers>
-
-    <prerequisites>
-        <maven>3</maven>
-    </prerequisites>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <url>https://github.com/nkokhelox/InstanceDiff</url>
 
     <dependencies>
         <dependency>
@@ -47,9 +34,35 @@
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <version>4.3.0</version>
                 <configuration>
-                    <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
+                    <jacocoReports>
+                        <jacocoReport>/target/site/jacoco/jacoco.xml</jacocoReport>
+                    </jacocoReports>
                 </configuration>
             </plugin>
-         </plugins>
-     </build>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.9</version>
+                <configuration>
+                    <output>file</output>
+                    <append>true</append>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
