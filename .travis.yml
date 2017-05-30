@@ -1,7 +1,3 @@
-before_install:
-  - mkdir -p "${GOPATH}/bin"
-  - curl https://glide.sh/get | bash
-
 language: java
 
 script: mvn clean test jacoco:report org.eluder.coveralls:coveralls-maven-plugin:report
