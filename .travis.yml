@@ -1,5 +1,4 @@
 before_install:
-  # Install Glide
   - mkdir -p "${GOPATH}/bin"
   - curl https://glide.sh/get | bash
 
