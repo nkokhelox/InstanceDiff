@@ -20,28 +20,26 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.4</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
-        <plugins> 
-        <!--
+        <plugins>
             <plugin>
                 <groupId>com.sourceclear</groupId>
                 <artifactId>srcclr-maven-plugin</artifactId>
                 <version>1.0.1</version>
-               <executions>
-                   <execution>
-                       <id>srcclr-scan</id>
-                       <phase>verify</phase>
-                       <goals>
-                           <goal>scan</goal>
-                       </goals>
-                   </execution>
-              </executions>
+                <executions>
+                    <execution>
+                        <id>srcclr-scan</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>scan</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-        -->
             <!-- Code compilation -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -86,6 +84,63 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
+                <configuration>
+                    <!--
+                       Enables analysis which takes more memory but finds more bugs.
+                       If you run out of memory, changes the value of the effort element
+                       to 'Low'.
+                   -->
+                    <effort>Max</effort>
+                    <!-- Build doesn't fail if problems are found -->
+                    <failOnError>false</failOnError>
+                    <!-- Reports all bugs (other values are medium and max) -->
+                    <threshold>Low</threshold>
+                    <!-- Produces XML report -->
+                    <xmlOutput>true</xmlOutput>
+                    <!-- Configures the directory in which the XML report is created -->
+                    <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+                </configuration>
+                <executions>
+                    <!--
+                       Ensures that FindBugs inspects source code when project is compiled.
+                   -->
+                    <execution>
+                        <id>analyze-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.7</version>
+                <configuration>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <language>java</language>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
