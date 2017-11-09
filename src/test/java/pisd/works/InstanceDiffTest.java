@@ -11,11 +11,9 @@ import java.util.Set;
 /**
  * Created by nkokhelox on 2017/04/29.
  */
-public class InstanceDiffTest
-{
+public class InstanceDiffTest {
     @Test
-    public void getDiffExcluding() throws Exception
-    {
+    public void getDiffExcluding() throws Exception {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
         instance1.pcf = 1;
@@ -34,8 +32,7 @@ public class InstanceDiffTest
     }
 
     @Test
-    public void getDiffOfEqualInstances() throws Exception
-    {
+    public void getDiffOfEqualInstances() throws Exception {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
 
@@ -50,8 +47,7 @@ public class InstanceDiffTest
     }
 
     @Test
-    public void getDiffOfNonExistingFields() throws Exception
-    {
+    public void getDiffOfNonExistingFields() throws Exception {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
 
@@ -66,8 +62,7 @@ public class InstanceDiffTest
     }
 
     @Test
-    public void getDiffOfFoundDiffFields() throws Exception
-    {
+    public void getDiffOfFoundDiffFields() throws Exception {
 
         GrandChild instance1 = new GrandChild("inst1");
         instance1.superField = 1;
@@ -88,14 +83,12 @@ public class InstanceDiffTest
     }
 
     @Test
-    public void getDiffEqualInstances() throws Exception
-    {
+    public void getDiffEqualInstances() throws Exception {
         assertTrue("Instances are equal, thus diff should be empty.", new InstanceDiff(new GrandChild(null), new GrandChild(null)).getDiff().isEmpty());
     }
 
     @Test
-    public void getDiffSuperFields() throws Exception
-    {
+    public void getDiffSuperFields() throws Exception {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
         instance1.superField = 1;
@@ -111,8 +104,7 @@ public class InstanceDiffTest
     }
 
     @Test
-    public void getDiffStopBeforeDiff() throws Exception
-    {
+    public void getDiffStopBeforeDiff() throws Exception {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
         instance1.superField = 1;
@@ -125,33 +117,27 @@ public class InstanceDiffTest
                 diff.isEmpty());
     }
 
-    class Parent
-    {
+    class Parent {
         int superField;
         private Object ppf;
 
-        public Parent(Object ppf)
-        {
+        public Parent(Object ppf) {
             this.ppf = ppf;
         }
     }
 
-    class Child extends Parent
-    {
+    class Child extends Parent {
         Object pcf;
 
-        public Child(Object ppf)
-        {
+        public Child(Object ppf) {
             super(ppf);
         }
     }
 
-    class GrandChild extends Child
-    {
+    class GrandChild extends Child {
         private Object gcpf;
 
-        public GrandChild(Object ppf)
-        {
+        public GrandChild(Object ppf) {
             super(ppf);
             gcpf = ppf;
         }
