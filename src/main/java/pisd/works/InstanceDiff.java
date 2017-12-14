@@ -10,7 +10,7 @@ import java.util.Set;
  * Check if all fields are the same by traversing though the inheritance hierarchy.
  * Compare the field values using the normal equality check.
  * <p>
- * {@author nkokhelox <Nkokhelo E. Mhlongo>}
+ * {@author nkokhelox}
  */
 public class InstanceDiff {
     private final Object instance2;
