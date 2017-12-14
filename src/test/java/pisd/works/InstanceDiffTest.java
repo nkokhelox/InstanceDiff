@@ -120,6 +120,16 @@ public class InstanceDiffTest {
     }
 
     @Test
+    public void getDiffOfSameObject() throws Exception {
+        GrandChild instance1 = new GrandChild(null);
+        Set<InstanceDiff.FieldDiff> diff = new InstanceDiff(instance1, instance1).getDiff();
+
+        assertTrue(
+                "Reference to the same object as instance 1 & 2",
+                diff.isEmpty());
+    }
+
+    @Test
     public void getDiffInstancesOfDifferentClasses() throws Exception {
         Set<InstanceDiff.FieldDiff> diff = new InstanceDiff(new String[1], "String").getDiff();
 
