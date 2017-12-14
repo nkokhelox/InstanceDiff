@@ -10,7 +10,7 @@ import java.util.Set;
  * Check if all fields are the same by traversing though the inheritance hierarchy.
  * Compare the field values using the normal equality check.
  * <p>
- * {@author nkokhelox <Nkokhelo E. Mhlongo>}
+ * {@author nkokhelox}
  */
 public class InstanceDiff {
     private final Object instance2;
@@ -152,7 +152,7 @@ public class InstanceDiff {
 
     private Set<FieldDiff> getDiff(DiffDecision decider) throws Exception {
         Set diff = new HashSet();
-        if(instance1 == instance2){//same reference = same thing
+        if(instance1 == instance2){ //same reference = same thing
             return diff;
         }
         else if (instance1 != null && instance2 != null && !instance1.equals(instance2)) {
