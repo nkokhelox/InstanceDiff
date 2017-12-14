@@ -1,14 +1,12 @@
 package pisd.works;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
-import com.sun.org.apache.xpath.internal.operations.String;
-import org.junit.*;
-
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by nkokhelox on 2017/04/29.
