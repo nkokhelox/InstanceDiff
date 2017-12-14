@@ -2,8 +2,10 @@ package pisd.works;
 
 import static org.junit.Assert.*;
 
+import com.sun.org.apache.xpath.internal.operations.String;
 import org.junit.*;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -115,6 +117,26 @@ public class InstanceDiffTest {
         assertTrue(
                 "IStop diff detection before getting to the super class where there's difference.",
                 diff.isEmpty());
+    }
+
+    @Test
+    public void getDiffOfSameObject() throws Exception {
+        GrandChild instance1 = new GrandChild(null);
+        Set<InstanceDiff.FieldDiff> diff = new InstanceDiff(instance1, instance1).getDiff();
+
+        assertTrue(
+                "Reference to the same object as instance 1 & 2",
+                diff.isEmpty());
+    }
+
+    @Test
+    public void getDiffInstancesOfDifferentClasses() throws Exception {
+        Set<InstanceDiff.FieldDiff> diff = new InstanceDiff(new String[1], "String").getDiff();
+
+        assertEquals(1, diff.size());
+        assertTrue("Instances of different classes are reporting the different class's names",
+                diff.removeIf( o -> ConstantKeys.DIFF_CLASS_TYPES.equals(o.getFieldName()))
+                );
     }
 
     class Parent {

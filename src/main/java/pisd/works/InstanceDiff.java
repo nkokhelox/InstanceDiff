@@ -152,7 +152,10 @@ public class InstanceDiff {
 
     private Set<FieldDiff> getDiff(DiffDecision decider) throws Exception {
         Set diff = new HashSet();
-        if (instance1 != null && instance2 != null && !instance1.equals(instance2)) {
+        if(instance1 == instance2){//same reference = same thing
+            return diff;
+        }
+        else if (instance1 != null && instance2 != null && !instance1.equals(instance2)) {
             int hierachyLevel = 0;
             Class klass = instance1.getClass();
             if (klass == instance2.getClass()) {
