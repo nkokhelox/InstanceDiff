@@ -15,9 +15,9 @@ import java.util.stream.Stream;
  * <p>
  * {@author nkokhelox}
  */
-public class InstanceDiff {
-    private final Object firstInstance;
-    private final Object secondInstance;
+public class InstanceDiff<T> {
+    private final T firstInstance;
+    private final T secondInstance;
     private final int hierarchyClimbToLevel;
 
     private enum DiffStrategy {
@@ -48,7 +48,7 @@ public class InstanceDiff {
             }
         }
 
-        boolean continueFieldDiffFor(Class klass, int currentLevel) {
+        boolean considerHierarchyLevel(Class klass, int currentLevel) {
             return !(Object.class.equals(klass)) && (currentLevel <= hierarchyClimbToLevel || hierarchyClimbToLevel < 0);
         }
 
@@ -58,12 +58,12 @@ public class InstanceDiff {
 
     }
 
-    public static final class FieldDiff implements Comparable {
+    public static final class FieldDiff<T> implements Comparable {
         private final String fieldName;
-        private final Object inst1FieldValue;
-        private final Object inst2FieldValue;
+        private final T inst1FieldValue;
+        private final T inst2FieldValue;
 
-        public FieldDiff(String fieldName, Object inst1FieldValue, Object inst2FieldValue) {
+        public FieldDiff(String fieldName, T inst1FieldValue, T inst2FieldValue) {
             this.fieldName = fieldName;
             this.inst1FieldValue = inst1FieldValue;
             this.inst2FieldValue = inst2FieldValue;
@@ -73,11 +73,11 @@ public class InstanceDiff {
             return fieldName;
         }
 
-        public Object getFirstInstanceValue() {
+        public T getFirstInstanceValue() {
             return inst1FieldValue;
         }
 
-        public Object getSecondInstanceValue() {
+        public T getSecondInstanceValue() {
             return inst2FieldValue;
         }
 
@@ -100,7 +100,7 @@ public class InstanceDiff {
      * @return the {@code non-null} {@link Set}&lt;{@link FieldDiff}&gt; for the fields with different values.
      * @since Origin
      */
-    public InstanceDiff(Object firstInstance, Object secondInstance) {
+    public InstanceDiff(T firstInstance, T secondInstance) {
         this(firstInstance, secondInstance, -1);
     }
 
@@ -115,7 +115,7 @@ public class InstanceDiff {
      *                              <i>if {@code hierarchyClimbToLevel = 5} then include fields of up to 5 super classes.</i>
      * @since Origin
      */
-    public InstanceDiff(Object firstInstance, Object secondInstance, int hierarchyClimbToLevel) {
+    public InstanceDiff(T firstInstance, T secondInstance, int hierarchyClimbToLevel) {
         this.firstInstance = firstInstance;
         this.secondInstance = secondInstance;
         this.hierarchyClimbToLevel = hierarchyClimbToLevel;
@@ -157,7 +157,7 @@ public class InstanceDiff {
             int hierarchyLevel = 0;
             Class klass = firstInstance.getClass();
             if (klass == secondInstance.getClass()) {
-                while (decider.continueFieldDiffFor(klass, hierarchyLevel)) {
+                while (decider.considerHierarchyLevel(klass, hierarchyLevel)) {
                     for (Field field : decider.filteredStream(Arrays.stream(klass.getDeclaredFields())).collect(Collectors.toSet())) {
                         field.setAccessible(true);
                         Object firstInstanceValue = field.get(firstInstance);
