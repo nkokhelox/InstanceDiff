@@ -9,9 +9,9 @@
 
   - ```InstanceDiff differentiator = new InstanceDiff(<INSTANCE OBJECT 1>, <INSTANCE OBJECT 2>)```
      
-     *`<INSTANCE OBJECT 1>`, `<INSTANCE OBJECT 2>` objects to be compared, all super classes considered when doing diff by default.*
+     *`<INSTANCE OBJECT 1>`, `<INSTANCE OBJECT 2>` are objects to be compared, all super classes considered when doing diff by default.*
   
-  ```InstanceDiff differentiator = new InstanceDiff(<INSTANCE OBJECT 1>, <INSTANCE OBJECT 2>, <HIERARCHY SCOPE LIMIT DEFAULT = -1>)```
+  - ```InstanceDiff differentiator = new InstanceDiff(<INSTANCE OBJECT 1>, <INSTANCE OBJECT 2>, <HIERARCHY SCOPE LIMIT>)```
     
      *`<HIERARCHY SCOPE LIMIT>` is number of super classes to consider when looking for differences between `<INSTANCE OBJECT 1>` and `<INSTANCE OBJECT 2>`.*
 
