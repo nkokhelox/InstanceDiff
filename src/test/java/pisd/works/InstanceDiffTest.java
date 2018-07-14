@@ -2,7 +2,6 @@ package pisd.works;
 
 import org.junit.Test;
 
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,18 +16,18 @@ public class InstanceDiffTest {
     public void getDiffExcluding() throws Exception {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
-        instance1.pcf = 1;
-        instance2.pcf = 2;
+        instance1.childPackageField = 1;
+        instance2.childPackageField = 2;
 
         HashSet excludeFields = new HashSet<String>();
-        excludeFields.add("pcf");
+        excludeFields.add("childPackageField");
 
         InstanceDiff diff = new InstanceDiff(instance1, instance2);
 
         assertFalse("Instances are different when un-filtered", diff.getDiff().isEmpty());
 
         assertTrue(
-                "No differences detected when pcf is explicitly ignored/excluded.",
+                "No differences detected when childPackageField is explicitly ignored/excluded.",
                 diff.getDiffExcluding(excludeFields).isEmpty());
     }
 
@@ -38,9 +37,9 @@ public class InstanceDiffTest {
         GrandChild instance2 = new GrandChild(null);
 
         HashSet diffOfFields = new HashSet<String>();
-        diffOfFields.add("gcpf");
-        diffOfFields.add("pcf");
-        diffOfFields.add("superField");
+        diffOfFields.add("grandChildPrivateField");
+        diffOfFields.add("childPackageField");
+        diffOfFields.add("parentPackageField");
 
         assertTrue(
                 "No differences from the specified fields",
@@ -65,22 +64,23 @@ public class InstanceDiffTest {
     @Test
     public void getDiffOfFoundDiffFields() throws Exception {
 
-        GrandChild instance1 = new GrandChild("inst1");
-        instance1.superField = 1;
-        instance1.gcpf = 1;
-        instance1.pcf = 1;
+        GrandChild instance1 = new GrandChild("instance1");
+        instance1.parentPackageField = 1;
+        instance1.grandChildPrivateField = 1;
+        instance1.childPackageField = 1;
 
         HashSet diffOfFields = new HashSet<String>();
-        diffOfFields.add("gcpf");
-        diffOfFields.add("pcf");
-        diffOfFields.add("superField");
+        diffOfFields.add("grandChildPrivateField");
+        diffOfFields.add("childPackageField");
+        diffOfFields.add("parentPackageField");
 
-        Object[] diff = new InstanceDiff(instance1, new GrandChild(null)).getDiffOf(diffOfFields).toArray();
+        Set s = new InstanceDiff(instance1, new GrandChild("instance2")).getDiffOf(diffOfFields);
+        Object[] diff = new InstanceDiff(instance1, new GrandChild("instance2")).getDiffOf(diffOfFields).toArray();
         Arrays.sort(diff);
         assertEquals("Instances are different by the value of 1 super class field.", 3, diff.length);
-        assertEquals("Field name", "gcpf", ((InstanceDiff.FieldDiff) diff[0]).getFieldName());
-        assertEquals("Field name", "pcf", ((InstanceDiff.FieldDiff) diff[1]).getFieldName());
-        assertEquals("Field name", "superField", ((InstanceDiff.FieldDiff) diff[2]).getFieldName());
+        assertEquals("Field name", "childPackageField", ((InstanceDiff.FieldDiff) diff[0]).getFieldName());
+        assertEquals("Field name", "grandChildPrivateField", ((InstanceDiff.FieldDiff) diff[1]).getFieldName());
+        assertEquals("Field name", "parentPackageField", ((InstanceDiff.FieldDiff) diff[2]).getFieldName());
     }
 
     @Test
@@ -92,24 +92,24 @@ public class InstanceDiffTest {
     public void getDiffSuperFields() throws Exception {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
-        instance1.superField = 1;
-        instance2.superField = 2;
+        instance1.parentPackageField = 1;
+        instance2.parentPackageField = 2;
 
         Object[] diff = new InstanceDiff(instance1, instance2).getDiff().toArray();
         assertEquals("Instances are different by the value of 1 super class field.", 1, diff.length);
 
         InstanceDiff.FieldDiff difference = ((InstanceDiff.FieldDiff) diff[0]);
-        assertEquals("Field name", "superField", difference.getFieldName());
-        assertEquals("Instance1 Field value", 1, difference.getInst1FieldValue());
-        assertEquals("Instance2 Field value", 2, difference.getInst2FieldValue());
+        assertEquals("Field name", "parentPackageField", difference.getFieldName());
+        assertEquals("Instance1 Field value", 1, difference.getFirstInstanceValue());
+        assertEquals("Instance2 Field value", 2, difference.getSecondInstanceValue());
     }
 
     @Test
     public void getDiffStopBeforeDiff() throws Exception {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
-        instance1.superField = 1;
-        instance2.superField = 2;
+        instance1.parentPackageField = 1;
+        instance2.parentPackageField = 2;
         int detectUptoParentLevel = 1;
         Set<InstanceDiff.FieldDiff> diff = new InstanceDiff(instance1, instance2, detectUptoParentLevel).getDiff();
 
@@ -139,28 +139,28 @@ public class InstanceDiffTest {
     }
 
     class Parent {
-        int superField;
-        private Object ppf;
+        int parentPackageField;
+        private Object parentPrivateField;
 
-        public Parent(Object ppf) {
-            this.ppf = ppf;
+        public Parent(Object parentPrivateField) {
+            this.parentPrivateField = parentPrivateField;
         }
     }
 
     class Child extends Parent {
-        Object pcf;
+        Object childPackageField;
 
-        public Child(Object ppf) {
-            super(ppf);
+        public Child(Object parentPrivateField) {
+            super(parentPrivateField);
         }
     }
 
     class GrandChild extends Child {
-        private Object gcpf;
+        private Object grandChildPrivateField;
 
-        public GrandChild(Object ppf) {
-            super(ppf);
-            gcpf = ppf;
+        public GrandChild(Object parentPrivateField) {
+            super(parentPrivateField);
+            grandChildPrivateField = parentPrivateField;
         }
     }
 
