@@ -93,11 +93,9 @@ public class InstanceDiff<T> {
     }
 
     /**
-     * Compare all fields for all classes in the hierarchy
-     *
+     * Instances to be compared
      * @param firstInstance  first instance
      * @param secondInstance second instance
-     * @return the {@code non-null} {@link Set}&lt;{@link FieldDiff}&gt; for the fields with different values.
      * @since Origin
      */
     public InstanceDiff(T firstInstance, T secondInstance) {
@@ -126,7 +124,7 @@ public class InstanceDiff<T> {
      * @return the {@code non-null} {@link Set}&lt;{@link FieldDiff}&gt; for the fields with different values.
      * @since Origin
      */
-    public Set<FieldDiff> getDiffExcluding(Set<String> ignoreFields) throws Exception {
+    public Set<FieldDiff<Object>> getDiffExcluding(Set<String> ignoreFields) throws Exception {
         return getDiff(new DiffDecision(DiffStrategy.EXCLUDE_FIELDS, ignoreFields));
     }
 
@@ -135,7 +133,7 @@ public class InstanceDiff<T> {
      * @return the {@code non-null} {@link Set}&lt;{@link FieldDiff}&gt; for the fields with different values.
      * @since Origin
      */
-    public Set<FieldDiff> getDiffOf(Set<String> fieldsToDiff) throws Exception {
+    public Set<FieldDiff<Object>> getDiffOf(Set<String> fieldsToDiff) throws Exception {
         return getDiff(new DiffDecision(DiffStrategy.DIFF_OF_FIELDS, fieldsToDiff));
     }
 
@@ -143,13 +141,13 @@ public class InstanceDiff<T> {
      * @return the {@code non-null} {@link Set}&lt;{@link FieldDiff}&gt; for the fields with different values.
      * @since Origin
      */
-    public Set<FieldDiff> getDiff() throws Exception {
+    public Set<FieldDiff<Object>> getDiff() throws Exception {
         return getDiff(new DiffDecision(DiffStrategy.ALL_FIELDS));
     }
 
 
-    private Set<FieldDiff> getDiff(DiffDecision decider) throws Exception {
-        Set<FieldDiff> differenceSet = new HashSet();
+    private Set<FieldDiff<Object>> getDiff(DiffDecision decider) throws Exception {
+        Set<FieldDiff<Object>> differenceSet = new HashSet<>();
 
         if (firstInstance == secondInstance) { //same reference = same thing thus everything must be the same.
             return differenceSet;
@@ -163,14 +161,14 @@ public class InstanceDiff<T> {
                         Object firstInstanceValue = field.get(firstInstance);
                         Object secondInstanceValue = field.get(secondInstance);
                         if (!decider.areEqual(firstInstanceValue, secondInstanceValue)) {
-                            differenceSet.add(new FieldDiff(field.getName(), firstInstanceValue, secondInstanceValue));
+                            differenceSet.add(new FieldDiff<>(field.getName(), firstInstanceValue, secondInstanceValue));
                         }
                     }
                     klass = klass.getSuperclass();
                     hierarchyLevel++;
                 }
             } else {
-                differenceSet.add(new FieldDiff(ConstantKeys.DIFF_CLASS_TYPES, firstInstance.getClass().getName(), secondInstance.getClass().getName()));
+                differenceSet.add(new FieldDiff<>(ConstantKeys.DIFF_CLASS_TYPES, firstInstance.getClass().getName(), secondInstance.getClass().getName()));
             }
         }
         return differenceSet;

@@ -19,10 +19,10 @@ public class InstanceDiffTest {
         instance1.childPackageField = 1;
         instance2.childPackageField = 2;
 
-        HashSet excludeFields = new HashSet<String>();
+        HashSet<String> excludeFields = new HashSet<>();
         excludeFields.add("childPackageField");
 
-        InstanceDiff diff = new InstanceDiff(instance1, instance2);
+        InstanceDiff<GrandChild> diff = new InstanceDiff<>(instance1, instance2);
 
         assertFalse("Instances are different when un-filtered", diff.getDiff().isEmpty());
 
@@ -36,14 +36,14 @@ public class InstanceDiffTest {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
 
-        HashSet diffOfFields = new HashSet<String>();
+        HashSet<String> diffOfFields = new HashSet<>();
         diffOfFields.add("grandChildPrivateField");
         diffOfFields.add("childPackageField");
         diffOfFields.add("parentPackageField");
 
         assertTrue(
                 "No differences from the specified fields",
-                new InstanceDiff(instance1, instance2).getDiffOf(diffOfFields).isEmpty());
+                new InstanceDiff<>(instance1, instance2).getDiffOf(diffOfFields).isEmpty());
     }
 
     @Test
@@ -51,14 +51,14 @@ public class InstanceDiffTest {
         GrandChild instance1 = new GrandChild(null);
         GrandChild instance2 = new GrandChild(null);
 
-        HashSet diffOfFields = new HashSet<String>();
+        HashSet<String> diffOfFields = new HashSet<>();
         diffOfFields.add("does");
         diffOfFields.add("not");
         diffOfFields.add("exist");
 
         assertTrue(
                 "No differences, specified fields does not exist",
-                new InstanceDiff(instance1, instance2).getDiffOf(diffOfFields).isEmpty());
+                new InstanceDiff<>(instance1, instance2).getDiffOf(diffOfFields).isEmpty());
     }
 
     @Test
@@ -69,13 +69,12 @@ public class InstanceDiffTest {
         instance1.grandChildPrivateField = 1;
         instance1.childPackageField = 1;
 
-        HashSet diffOfFields = new HashSet<String>();
+        HashSet<String> diffOfFields = new HashSet<>();
         diffOfFields.add("grandChildPrivateField");
         diffOfFields.add("childPackageField");
         diffOfFields.add("parentPackageField");
 
-        Set s = new InstanceDiff(instance1, new GrandChild("instance2")).getDiffOf(diffOfFields);
-        Object[] diff = new InstanceDiff(instance1, new GrandChild("instance2")).getDiffOf(diffOfFields).toArray();
+        Object[] diff = new InstanceDiff<>(instance1, new GrandChild("instance2")).getDiffOf(diffOfFields).toArray();
         Arrays.sort(diff);
         assertEquals("Instances are different by the value of 1 super class field.", 3, diff.length);
         assertEquals("Field name", "childPackageField", ((InstanceDiff.FieldDiff) diff[0]).getFieldName());
@@ -85,7 +84,10 @@ public class InstanceDiffTest {
 
     @Test
     public void getDiffEqualInstances() throws Exception {
-        assertTrue("Instances are equal, thus diff should be empty.", new InstanceDiff(new GrandChild(null), new GrandChild(null)).getDiff().isEmpty());
+        assertTrue(
+                "Instances are equal, thus diff should be empty.",
+                new InstanceDiff<>(new GrandChild(null), new GrandChild(null)).getDiff().isEmpty()
+        );
     }
 
     @Test
@@ -95,7 +97,7 @@ public class InstanceDiffTest {
         instance1.parentPackageField = 1;
         instance2.parentPackageField = 2;
 
-        Object[] diff = new InstanceDiff(instance1, instance2).getDiff().toArray();
+        Object[] diff = new InstanceDiff<>(instance1, instance2).getDiff().toArray();
         assertEquals("Instances are different by the value of 1 super class field.", 1, diff.length);
 
         InstanceDiff.FieldDiff difference = ((InstanceDiff.FieldDiff) diff[0]);
@@ -111,7 +113,7 @@ public class InstanceDiffTest {
         instance1.parentPackageField = 1;
         instance2.parentPackageField = 2;
         int detectUptoParentLevel = 1;
-        Set<InstanceDiff.FieldDiff> diff = new InstanceDiff(instance1, instance2, detectUptoParentLevel).getDiff();
+        Set<InstanceDiff.FieldDiff<Object>> diff = new InstanceDiff<>(instance1, instance2, detectUptoParentLevel).getDiff();
 
         assertTrue(
                 "IStop diff detection before getting to the super class where there's difference.",
@@ -121,7 +123,7 @@ public class InstanceDiffTest {
     @Test
     public void getDiffOfSameObject() throws Exception {
         GrandChild instance1 = new GrandChild(null);
-        Set<InstanceDiff.FieldDiff> diff = new InstanceDiff(instance1, instance1).getDiff();
+        Set<InstanceDiff.FieldDiff<Object>> diff = new InstanceDiff<>(instance1, instance1).getDiff();
 
         assertTrue(
                 "Reference to the same object as instance 1 & 2",
@@ -130,19 +132,19 @@ public class InstanceDiffTest {
 
     @Test
     public void getDiffInstancesOfDifferentClasses() throws Exception {
-        Set<InstanceDiff.FieldDiff> diff = new InstanceDiff(new String[1], "String").getDiff();
+        Set<InstanceDiff.FieldDiff<Object>> diff = new InstanceDiff<>(new String[1], "String").getDiff();
 
         assertEquals(1, diff.size());
         assertTrue("Instances of different classes are reporting the different class's names",
-                diff.removeIf( o -> ConstantKeys.DIFF_CLASS_TYPES.equals(o.getFieldName()))
-                );
+                diff.removeIf(o -> ConstantKeys.DIFF_CLASS_TYPES.equals(o.getFieldName()))
+        );
     }
 
     class Parent {
         int parentPackageField;
         private Object parentPrivateField;
 
-        public Parent(Object parentPrivateField) {
+        Parent(Object parentPrivateField) {
             this.parentPrivateField = parentPrivateField;
         }
     }
@@ -150,7 +152,7 @@ public class InstanceDiffTest {
     class Child extends Parent {
         Object childPackageField;
 
-        public Child(Object parentPrivateField) {
+        Child(Object parentPrivateField) {
             super(parentPrivateField);
         }
     }
@@ -158,7 +160,7 @@ public class InstanceDiffTest {
     class GrandChild extends Child {
         private Object grandChildPrivateField;
 
-        public GrandChild(Object parentPrivateField) {
+        GrandChild(Object parentPrivateField) {
             super(parentPrivateField);
             grandChildPrivateField = parentPrivateField;
         }
